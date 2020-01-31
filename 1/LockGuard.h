@@ -17,7 +17,7 @@ public:
         m.lock(); 
     }
 
-    lock_guard( mutex_type& m, adopt_lock_t t ) : _m(m) {}
+    lock_guard( mutex_type& m, adopt_lock_t) : _m(m) {}
 
     // disable copy constructor and operator=
     lock_guard(const lock_guard&) = delete;
