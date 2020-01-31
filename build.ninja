@@ -1,0 +1,31 @@
+CPP = clang++
+CXX = clang++
+ar = ar
+CXXFLAGS = -std=c++17 -Wall -Werror
+builddir = ./build
+
+rule cxx
+ command = $CPP $CXXFLAGS -MMD -MF $out.d -c $in -o $out
+ deps = gcc
+ depfile = $out.d
+ description = CXX $in
+
+rule cxxtest
+ command = $CPP -pthread $CXXFLAGS -I googletest/googletest/include -I googletest/googletest -MMD -MF $out.d -c $in -o $out
+ deps = gcc
+ depfile = $out.d
+ description = CXX $in
+
+rule link
+  command = $CXX -pthread $LDFLAGS -o $out $in $libs
+  description = LINK $out
+
+rule ar
+  command = rm -f $out && $ar crs $out $in
+  description = AR $out
+
+build $builddir/gtest-all.a: ar $builddir/gtest-all.o
+build $builddir/gtest_main.o: cxxtest googletest/googletest/src/gtest_main.cc
+build $builddir/gtest-all.o: cxxtest googletest/googletest/src/gtest-all.cc
+build $builddir/factorial_test.o: cxxtest factorial_test.cpp
+build $builddir/test: link $builddir/factorial_test.o $builddir/gtest-all.a $builddir/gtest_main.o
