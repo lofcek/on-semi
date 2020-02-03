@@ -1,2 +1,2 @@
 build $builddir/LockGuard_test.o: cxxtest 1/LockGuard_test.cpp
-build $builddir/test1: link $builddir/LockGuard_test.o $builddir/gtest-all.a $builddir/gtest_main.o
+build $binaries/1_test: link $builddir/LockGuard_test.o $builddir/gtest-all.a $builddir/gtest_main.o

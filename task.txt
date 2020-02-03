@@ -10,7 +10,7 @@
       2-3 threads running
 
 3) Use c++11 std::condition_signal in solution from #2 to synchronize threads
-      -- Psuedo Code --
+      -- Pseudo Code --
       main:
         1) start: thread 1, thread 2, thread 3
         2) all threads block on condition_signal

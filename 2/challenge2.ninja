@@ -1,2 +1,2 @@
-build $builddir/ThreadExample.o: cxx 2/ThreadExample.cpp
-build $builddir/test2: link $builddir/ThreadExample.o
+build $builddir/ThreadExample2.o: cxx 2/ThreadExample2.cpp
+build $binaries/2_threads: link $builddir/ThreadExample2.o

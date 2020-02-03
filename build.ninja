@@ -1,23 +1,27 @@
-CPP = clang++
-CXX = clang++
+
+cxx = clang++
 ar = ar
-CXXFLAGS = -std=c++17 -Wall -Wextra -Werror
+cxxflags = -std=c++17 -Wall -Wextra -Werror
+
+# builddir defines directory where we store temp files (eg. *.o, *.a)
 builddir = build
+# binaries defines where we store result of the build
+binaries = binaries
 
 rule cxx
- command = $CPP $CXXFLAGS -MMD -MF $out.d -c $in -o $out
+ command = $cxx $cxxflags -MMD -MF $out.d -c $in -o $out
  deps = gcc
  depfile = $out.d
  description = CXX $in
 
 rule cxxtest
- command = $CPP -pthread $CXXFLAGS -I googletest/googletest/include -I googletest/googletest -MMD -MF $out.d -c $in -o $out
+ command = $cxx -pthread $cxxflags -I googletest/googletest/include -I googletest/googletest -MMD -MF $out.d -c $in -o $out
  deps = gcc
  depfile = $out.d
  description = CXX $in
 
 rule link
-  command = $CXX -pthread $LDFLAGS -o $out $in $libs
+  command = $cxx -pthread $LDFLAGS -o $out $in $libs
   description = LINK $out
 
 rule ar
@@ -30,3 +34,5 @@ build $builddir/gtest-all.o: cxxtest googletest/googletest/src/gtest-all.cc
 
 subninja 1/challenge1.ninja
 subninja 2/challenge2.ninja
+subninja 4/challenge4.ninja
+

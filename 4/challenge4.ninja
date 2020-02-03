@@ -1,0 +1,2 @@
+build $builddir/ThreadExample4.o: cxx 4/ThreadExample4.cpp
+build $binaries/4_threads: link $builddir/ThreadExample4.o
