@@ -1,0 +1,4 @@
+build $builddir/dispatcher_challenge.o: cxx 5/dispatcher_challenge.cpp
+build $binaries/5_dispatcher: link $builddir/dispatcher_challenge.o
+
+cxxflags = $cxxflags -I rapidjson/include

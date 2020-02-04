@@ -21,7 +21,7 @@ rule cxxtest
  description = CXX $in
 
 rule link
-  command = $cxx -pthread $LDFLAGS -o $out $in $libs
+  command = $cxx -pthread -o $out $in $libs
   description = LINK $out
 
 rule ar
@@ -35,4 +35,5 @@ build $builddir/gtest-all.o: cxxtest googletest/googletest/src/gtest-all.cc
 subninja 1/challenge1.ninja
 subninja 2/challenge2.ninja
 subninja 4/challenge4.ninja
+subninja 5/challenge5.ninja
 
