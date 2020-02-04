@@ -1,7 +1,7 @@
 
 cxx = clang++
 ar = ar
-cxxflags = -std=c++17 -Wall -Wextra -Werror
+cxxflags = -std=c++17 -g -Wall -Wextra -Werror
 
 # builddir defines directory where we store temp files (eg. *.o, *.a)
 builddir = build

@@ -19,19 +19,14 @@ using namespace std;
 static std::mutex g_mutex;
 static std::condition_variable_any g_cond_var;
 static std::string g_current;
-static int g_ready = 0;
 
 static std::random_device g_rd;  //Will be used to obtain a seed for the random number engine
 static std::mt19937 g_gen(g_rd());
 
 void thread_main(std::string me, std::string next_thread) {
-    std::uniform_int_distribution<int> timeout(1000, 5000);
-
-    challenge::lock_guard lk(g_mutex);
-    g_ready++;
-    g_cond_var.notify_all();
-
     cout << me << ": starting, waiting.\n";
+    std::uniform_int_distribution<int> timeout(1000, 5000);
+    challenge::lock_guard lk(g_mutex);
     for(;;) {
         g_cond_var.wait(g_mutex, [&]{return g_current == me;});
         cout << me << ": signal received, doing work ....\n";
@@ -41,10 +36,6 @@ void thread_main(std::string me, std::string next_thread) {
         cout << me << ": done with work, signal next thread\n";
         g_current = next_thread;
         g_cond_var.notify_all();
-
-        // here is a small pitfall, because mutex cannot be released at the end of the loop.
-        // If mutex had been released here, the g_cond_var could have been notified sooner than
-        // this thread would be waiting. Notifiacition could be lost (lost wakeup).   
     }
 }
 
@@ -58,14 +49,6 @@ int main() {
     thread t1(thread_main, n1, n2);
     thread t2(thread_main, n2, n3);
     thread t3(thread_main, n3, n1);
-
-    // and here is another pitfall. I should not notify the first thread before all threads
-    // are wainting. But I how I know that. I decide to use variable g_ready and the same g_cond_var
-    // to notify also main, that all threads are waiting.
-    {
-        challenge::lock_guard lk(g_mutex);
-        g_cond_var.wait(g_mutex, [&]{return g_ready == 3;});
-    }
 
     // I should wait until all threads are waiting.
     cout <<  "main: starting thread 1.\n";
