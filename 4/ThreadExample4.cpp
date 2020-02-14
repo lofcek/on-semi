@@ -26,6 +26,11 @@ static std::mt19937 g_gen(g_rd());
 void thread_main(std::string me, std::string next_thread) {
     cout << me << ": starting, waiting.\n";
     std::uniform_int_distribution<int> timeout(1000, 5000);
+    // in our case is of course not imporant whether mutex is locked
+    // during "sleeping", because just one thread could be active.
+    // However in real world we should lock mutex for a first time
+    // during wait, that release it and again
+    // during change g_current and notify_all.
     challenge::lock_guard lk(g_mutex);
     for(;;) {
         g_cond_var.wait(g_mutex, [&]{return g_current == me;});
